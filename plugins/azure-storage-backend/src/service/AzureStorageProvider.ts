@@ -3,6 +3,8 @@ import { AzureSorageConfig } from './AzureStorageConfig';
 import {
   BlobServiceClient,
   StorageSharedKeyCredential,
+  BlobGenerateSasUrlOptions,
+  BlobSASPermissions,
 } from '@azure/storage-blob';
 import { ClientSecretCredential } from '@azure/identity';
 
@@ -114,5 +116,29 @@ export class AzureStorageProvider {
     );
     const downloadBlockBlobResponse = await blobClient.download();
     return downloadBlockBlobResponse.readableStreamBody;
+  }
+  async getDownloadLink(
+    storageAccount: string,
+    containerName: string,
+    blobName: string,
+    prefix: any,
+  ): Promise<any> {
+    const blobServiceClient = this.getblobServiceClient(storageAccount);
+    // Only available for BlobClient constructed with a shared key credential.
+    // So this can only be used with the Azure Storage Account key.
+    if (!(blobServiceClient.credential instanceof StorageSharedKeyCredential)) {
+      throw new Error('Shared key credential is needed to generate SAS token');
+    }
+    // Generates a SAS token valid for 15 minutes for the blob
+    const sharedAccessPolicy: BlobGenerateSasUrlOptions = {
+      permissions: BlobSASPermissions.parse('r'),
+      expiresOn: new Date(new Date().getTime() + 15 * 60000),
+    };
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const blobClient = containerClient.getBlobClient(
+      prefix ? prefix + blobName : blobName,
+    );
+    const blobDownloadUrl = await blobClient.generateSasUrl(sharedAccessPolicy);
+    return blobDownloadUrl;
   }
 }

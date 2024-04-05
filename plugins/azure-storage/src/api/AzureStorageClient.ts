@@ -104,4 +104,53 @@ export class AzureStorageClient implements AzureStorageApi {
         link.parentNode?.removeChild(link);
       });
   }
+  public async getDownloadLink(
+    storageAccount: string,
+    containerName: string,
+    blobName: string,
+    prefix?: string,
+  ): Promise<any> {
+    const baseUrl = `${await this.discoveryApi.getBaseUrl('azurestorage')}`;
+    const getDownloadLinkUrl = prefix
+      ? `${baseUrl}/${storageAccount}/containers/${containerName}/${blobName}/getDownloadLink?prefix=${prefix}`
+      : `${baseUrl}/${storageAccount}/containers/${containerName}/${blobName}/getDownloadLink`;
+    const { token: idToken } = await this.identityApi.getCredentials();
+    const response = await fetch(getDownloadLinkUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(idToken && { Authorization: `Bearer ${idToken}` }),
+      },
+    });
+
+    if (!response.ok) {
+      throw await ResponseError.fromResponse(response);
+    }
+
+    return response.json();
+  }
+  public async downloadBlobDirectly(
+    storageAccount: string,
+    containerName: string,
+    blobName: string,
+    prefix?: string,
+  ): Promise<any> {
+    const downloadLink: string = await this.getDownloadLink(
+      storageAccount,
+      containerName,
+      blobName,
+      prefix,
+    );
+    await fetch(downloadLink)
+      .then(response => response.json())
+      .then(blob => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement('a');
+        link.href = url;
+        // link.setAttribute('download', blobName);
+        link.download = blobName;
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode?.removeChild(link);
+      });
+  }
 }

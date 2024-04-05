@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Typography, Grid, makeStyles } from '@material-ui/core';
 import SubdirectoryArrowLeftIcon from '@material-ui/icons/SubdirectoryArrowLeft';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import {
   Content,
   EmptyState,
@@ -125,6 +126,14 @@ export const AzureStorageContent = () => {
       folderStack.join(),
     );
   };
+  const downloadBlobDirectly = async (blobName: string) => {
+    azureStorageApi.downloadBlob(
+      accountName,
+      containerName,
+      blobName,
+      folderStack.join(),
+    );
+  };
 
   const { value, loading, error } = useAsync(async () => {
     const data: string[] = await azureStorageApi.listStorageAccounts();
@@ -189,10 +198,21 @@ export const AzureStorageContent = () => {
               rowData => {
                 return {
                   icon: () => <GetAppIcon />,
-                  tooltip: 'Download',
+                  tooltip: 'Download From Backend',
                   isFreeAction: false,
                   onClick: () => {
                     downloadBlob(rowData.filename, rowData.contentType);
+                  },
+                  hidden: rowData.contentType === 'Folder' ? true : false,
+                };
+              },
+              rowData => {
+                return {
+                  icon: () => <CloudDownloadIcon />,
+                  tooltip: 'Download From Azure',
+                  isFreeAction: false,
+                  onClick: () => {
+                    downloadBlobDirectly(rowData.filename);
                   },
                   hidden: rowData.contentType === 'Folder' ? true : false,
                 };

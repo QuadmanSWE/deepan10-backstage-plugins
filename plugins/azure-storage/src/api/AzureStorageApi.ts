@@ -20,4 +20,16 @@ export interface AzureStorageApi {
     contentType: string,
     prefix?: string,
   ): Promise<any>;
+  getDownloadLink(
+    storageAccount: string,
+    containerName: string,
+    blobName: string,
+    prefix?: string,
+  ): Promise<any>;
+  downloadBlobDirectly(
+    storageAccount: string,
+    containerName: string,
+    blobName: string,
+    prefix?: string,
+  ): Promise<any>;
 }
