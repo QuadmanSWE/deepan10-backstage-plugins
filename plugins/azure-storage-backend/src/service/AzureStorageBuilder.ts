@@ -103,6 +103,21 @@ export class AzureStorageBuilder {
       },
     );
 
+    router.get(
+      '/:storageAccount/containers/:containerName/:blobName/getDownloadLink',
+      async (request, response) => {
+        const { storageAccount, containerName, blobName } = request.params;
+        const prefix = request.query.prefix;
+        const url = await azureStorageProvider.getDownloadLink(
+          storageAccount,
+          containerName,
+          blobName,
+          prefix,
+        );
+        response.json({ url });
+      },
+    );
+
     router.use(errorHandler());
 
     return router;

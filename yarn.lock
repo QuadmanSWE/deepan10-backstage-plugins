@@ -10410,6 +10410,35 @@ babel-runtime@^6.26.0:
     core-js "^2.4.0"
     regenerator-runtime "^0.11.0"
 
+backstage-plugin-blackduck-backend@0.1.0-next:
+  version "0.1.0-next"
+  resolved "https://registry.yarnpkg.com/backstage-plugin-blackduck-backend/-/backstage-plugin-blackduck-backend-0.1.0-next.tgz#51ac81b5653d0190ce6edd1e46c8806df07ac158"
+  integrity sha512-5lAIWTu9zDOhmzjv8khp/SPLSUlwlFiUGK5SzfZo/6buyMhgusvY6FGFKPEg4U7Yd52VM9ZgH/VAdSFLkd1h9A==
+  dependencies:
+    "@backstage/backend-common" "^0.21.0"
+    "@backstage/config" "^1.1.1"
+    "@types/express" "*"
+    express "^4.17.1"
+    express-promise-router "^4.1.0"
+    node-fetch "^2.6.7"
+    winston "^3.2.1"
+    yn "^4.0.0"
+
+backstage-plugin-blackduck@1.2.1-next:
+  version "1.2.1-next"
+  resolved "https://registry.yarnpkg.com/backstage-plugin-blackduck/-/backstage-plugin-blackduck-1.2.1-next.tgz#8ec99a0a4ebb7bd5f91585d403b1ff4b6e8b0844"
+  integrity sha512-onqCLDaOT5q5oAmhEn9cmazJXEhWl7Mv9zfTQPHQs/SiV2SCrcgzN7lW9iV1Q5wLj8VOheymqGXbDlvm9Sgq6Q==
+  dependencies:
+    "@backstage/core-components" "^0.14.0"
+    "@backstage/core-plugin-api" "^1.9.0"
+    "@backstage/theme" "^0.5.1"
+    "@material-ui/core" "^4.9.13"
+    "@material-ui/icons" "^4.9.1"
+    "@material-ui/lab" "^4.0.0-alpha.61"
+    chart.js "^4.0.1"
+    react-chartjs-2 "^5.0.1"
+    react-use "^17.2.4"
+
 bail@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/bail/-/bail-2.0.2.tgz#d26f5cd8fe5d6f832a31517b9f7c356040ba6d5d"
